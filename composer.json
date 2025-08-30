@@ -1,0 +1,39 @@
+{
+  "name": "apollo/composer-preloader-plugin",
+  "description": "PHP preloader for Composer",
+  "type": "composer-plugin",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Oleksii Bogatchenko",
+      "email": "oleksii@h01.org.ua"
+    }
+  ],
+  "require": {
+    "php": "^8.1",
+    "nikic/php-parser": "~4.13.2",
+    "symfony/finder": "~7.3.2",
+    "composer-plugin-api": "^2.0",
+    "marcj/topsort": "~2.0.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.5.20",
+    "composer/composer": "^2.0.13"
+  },
+  "autoload": {
+    "psr-4": {
+      "Oleksii\\ComposerPreloader\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Oleksii\\ComposerPreloader\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "class": "Oleksii\\ComposerPreloader\\Composer\\Plugin"
+  },
+  "scripts": {
+    "test": ["phpunit "]
+  }
+}
