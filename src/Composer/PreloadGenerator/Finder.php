@@ -69,8 +69,8 @@ class Finder {
             try {
                 $ast = $this->parserFactory->parse($file->getContents());
             } catch (\Throwable $e) {
-                continue;
                 echo $e->getMessage() . " in file: " . $file->getPathname();
+                continue;
             }
 
 
