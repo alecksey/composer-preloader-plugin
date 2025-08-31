@@ -65,7 +65,14 @@ class Finder {
         $composerRootDir = realpath(dirname(\Composer\Factory::getComposerFile()));
 
         foreach ($filesIterator as $file) {
-            $ast = $this->parserFactory->parse($file->getContents());
+
+            try {
+                $ast = $this->parserFactory->parse($file->getContents());
+            } catch (\Throwable $e) {
+                continue;
+                echo $e->getMessage() . " in file: " . $file->getPathname();
+            }
+
 
 
             $useStatements = [];
