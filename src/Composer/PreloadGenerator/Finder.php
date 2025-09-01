@@ -34,7 +34,7 @@ class Finder {
     {
         $this->config = $config;
         $this->finder = new SymfonyFinder();
-        $this->parserFactory = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+        $this->parserFactory = (new ParserFactory())->createForHostVersion();
         $this->rootDir = realpath(dirname(\Composer\Factory::getComposerFile()));
     }
 
@@ -91,7 +91,7 @@ class Finder {
             $directoryRegexp = '/^(';
             $pathList = [];
             foreach ($this->config->getExcludePaths() as $excludePath) {
-                $excludePath = str_replace('\\', '/', $excludePath);
+                $excludePath = str_replace('\\', '/', $this->rootDir . DIRECTORY_SEPARATOR . $excludePath);
                 if (substr($excludePath, -1) !== '/') {
                     $excludePath .= '/'; // Force all directives to be full direcory paths with "/" suffix.
                 }
