@@ -128,13 +128,13 @@ class Finder {
 
             if($file->isDir()) continue;
 
-            $this->processFile($file, $fileList);
+            $this->processFile($file, $loader, $fileList);
         }
 
         return $fileList;
     }
 
-    private function processFile(\SplFileInfo $file, array &$fileList) : void
+    private function processFile(\SplFileInfo $file, $loader, array &$fileList) : void
     {
         $depsAdded = [];
 
@@ -201,7 +201,7 @@ class Finder {
 
         foreach ($depsAdded as $dep) {
             $depFile = new \SplFileInfo($dep);
-            $this->processFile($depFile, $fileList);
+            $this->processFile($depFile, $loader, $fileList);
         }
     }
 }
