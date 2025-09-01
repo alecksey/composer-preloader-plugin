@@ -19,11 +19,13 @@ class Config
 
     private array $exclude_paths = [];
 
-    private $exclude_files = [];
+    private array $exclude_files = [];
 
-    private $vendor_dir = 'vendor';
+    private ?string $exclude_files_regex = null;
 
-    private $output_file = 'vendor/preload.php';
+    private string $vendor_dir = 'vendor';
+
+    private string $output_file = 'vendor/preload.php';
 
     public function __construct(array $paths = [], array $files = [], array $exclude_paths = [], array $exclude_files = [], array $extensions = [], $vendor_dir = '')
     {
@@ -183,6 +185,16 @@ class Config
         }
 
         $this->output_file = $output_file;
+    }
+
+    public function getExcludeFilesRegex(): ?string
+    {
+        return $this->exclude_files_regex;
+    }
+
+    public function setExcludeFilesRegex(?string $exclude_files_regex): void
+    {
+        $this->exclude_files_regex = $exclude_files_regex;
     }
 
 }

@@ -74,6 +74,10 @@ class PreloaderCommand extends BaseCommand
             $config->setOutputFile($extra['preloader']['output-file']);
         }
 
+        if(isset($extra['preloader']['exclude-regex'])) {
+            $config->setExcludeFilesRegex($extra['preloader']['exclude-regex']);
+        }
+
         $config->setVendorDir($vendorDir);
 
         $this->config = $config;
