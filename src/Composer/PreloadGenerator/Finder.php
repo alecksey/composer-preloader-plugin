@@ -185,6 +185,10 @@ class Finder {
             foreach ($visitor->getFoundUseStatements() as $useStatement) {
                 $filePath = $loader->findFile($useStatement['name']);
 
+                if(is_dir($filePath)) {
+                    throw new \RuntimeException('Directory is not supported');
+                }
+
                 $filePath = str_replace($this->rootDir . DIRECTORY_SEPARATOR , '', realpath($filePath));
 
                 if(!isset($fileList[$filePath])) {
