@@ -61,7 +61,7 @@ class Finder {
         $filterCallback = $this->getFilterCallback();
 
         if (null !== $filterCallback ) {
-            $this->finder->filter();
+            $this->finder->filter($filterCallback);
         }
 
 
