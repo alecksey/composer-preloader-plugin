@@ -136,7 +136,7 @@ class Finder {
         return $fileList;
     }
 
-    private function processFile(\SplFileInfo $file, $loader, array &$fileList) : void
+    private function processFile(SplFileInfo $file, $loader, array &$fileList) : void
     {
         $depsAdded = [];
 
@@ -202,7 +202,7 @@ class Finder {
 
 
         foreach ($depsAdded as $dep) {
-            $depFile = new \SplFileInfo($dep);
+            $depFile = new SplFileInfo($dep);
             $this->processFile($depFile, $loader, $fileList);
         }
     }
