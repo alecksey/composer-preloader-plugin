@@ -202,7 +202,7 @@ class Finder {
 
 
         foreach ($depsAdded as $dep) {
-            $depFile = new SplFileInfo($dep);
+            $depFile = new SplFileInfo($this->rootDir . DIRECTORY_SEPARATOR . $dep, $dep, dirname($dep));
             $this->processFile($depFile, $loader, $fileList);
         }
     }
