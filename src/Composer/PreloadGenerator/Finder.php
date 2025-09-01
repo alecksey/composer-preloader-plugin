@@ -47,7 +47,13 @@ class Finder {
             throw new BadMethodCallException('Include folders must be set');
         }
 
-        $this->finder->in($this->config->getPaths());
+        $paths = $this->config->getPaths();
+
+        foreach ($paths as &$path) {
+            $path = $this->rootDir . DIRECTORY_SEPARATOR . $path;
+        }
+
+        $this->finder->in($paths);
         foreach ($this->config->getExtensions() as $extension) {
             $this->finder->files()->name('*.' . $extension);
         }
@@ -91,7 +97,7 @@ class Finder {
                 }
                 $excludePath = preg_quote($excludePath, '/');
                 $pathList[] = $excludePath;
-             }
+            }
 
             $directoryRegexp .= implode('|', $pathList);
             $directoryRegexp .= ')/i';
@@ -138,10 +144,13 @@ class Finder {
 
     private function processFile(SplFileInfo $file, $loader, array &$fileList) : void
     {
+        gc_enable();
         $depsAdded = [];
 
+        $parserFactory = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+
         try {
-            $ast = $this->parserFactory->parse($file->getContents());
+            $ast = $parserFactory->parse($file->getContents());
         } catch (\Throwable $e) {
             echo $e->getMessage() . " in file: " . $file->getPathname();
             return;
@@ -183,7 +192,13 @@ class Finder {
 
         if(count($visitor->getFoundUseStatements()) > 0) {
             foreach ($visitor->getFoundUseStatements() as $useStatement) {
+
+
                 $filePath = $loader->findFile($useStatement['name']);
+
+                if(false === $filePath) {
+                    continue;
+                }
 
                 if(is_dir($filePath)) {
                     throw new \RuntimeException('Directory is not supported');
@@ -199,15 +214,18 @@ class Finder {
             }
         }
 
-        $fileList[$file->getPathname()] = [
-            'path' => $file->getPathname(),
+        $basePathName = str_replace($this->rootDir . DIRECTORY_SEPARATOR, '', $file->getPathname());
+
+        $fileList[$basePathName] = [
+            'path' => $basePathName,
             'deps' => $deps
         ];
 
-
         foreach ($depsAdded as $dep) {
-            $depFile = new SplFileInfo($this->rootDir . DIRECTORY_SEPARATOR . $dep, $dep, dirname($dep));
+            $depFile = new SplFileInfo($this->rootDir . DIRECTORY_SEPARATOR . $dep, dirname($dep), $dep);
             $this->processFile($depFile, $loader, $fileList);
         }
+
+        gc_collect_cycles();
     }
 }

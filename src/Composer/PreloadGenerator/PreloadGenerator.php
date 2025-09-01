@@ -27,7 +27,7 @@ class PreloadGenerator {
 
 
         $sorter = new StringSort();
-
+        $sorter->setThrowCircularDependency(false);
         foreach ($fileList as $fileInfo) {
             $sorter->add($fileInfo['path'], $fileInfo['deps']);;
         }
