@@ -120,7 +120,6 @@ class Finder {
     private function processFileList(\Iterator $filesIterator) : array
     {
         $fileList = [];
-        $depsAdded = [];
 
         $loader = require 'vendor/autoload.php';
         $composerRootDir = realpath(dirname(\Composer\Factory::getComposerFile()));
@@ -137,6 +136,8 @@ class Finder {
 
     private function processFile(\SplFileInfo $file, array &$fileList) : void
     {
+        $depsAdded = [];
+
         try {
             $ast = $this->parserFactory->parse($file->getContents());
         } catch (\Throwable $e) {
