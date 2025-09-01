@@ -28,12 +28,14 @@ class Finder {
 
     private \PhpParser\Parser $parserFactory;
 
+    private string $rootDir;
+
     public function __construct(Config $config)
     {
         $this->config = $config;
         $this->finder = new SymfonyFinder();
         $this->parserFactory = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
-
+        $this->rootDir = realpath(dirname(\Composer\Factory::getComposerFile()));
     }
 
     /**
@@ -122,7 +124,7 @@ class Finder {
         $fileList = [];
 
         $loader = require 'vendor/autoload.php';
-        $composerRootDir = realpath(dirname(\Composer\Factory::getComposerFile()));
+
 
         foreach ($filesIterator as $file) {
 
@@ -183,7 +185,7 @@ class Finder {
             foreach ($visitor->getFoundUseStatements() as $useStatement) {
                 $filePath = $loader->findFile($useStatement['name']);
 
-                $filePath = str_replace($composerRootDir . DIRECTORY_SEPARATOR , '', realpath($filePath));
+                $filePath = str_replace($this->rootDir . DIRECTORY_SEPARATOR , '', realpath($filePath));
 
                 if(!isset($fileList[$filePath])) {
                     $depsAdded[$filePath] = $filePath;
