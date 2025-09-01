@@ -91,7 +91,7 @@ class Finder {
                 $pathList[] = $excludePath;
              }
 
-            $directoryRegexp .= implode('|', $dirs);
+            $directoryRegexp .= implode('|', $pathList);
             $directoryRegexp .= ')/i';
         }
 
