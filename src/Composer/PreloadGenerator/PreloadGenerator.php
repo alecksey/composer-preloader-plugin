@@ -89,6 +89,8 @@ include \$rootDir . \\DIRECTORY_SEPARATOR  .  '$filePath';
 
 PHP;
 
+        return $code;
+
     }
     private function renderFile(string $filePath) : string
     {
