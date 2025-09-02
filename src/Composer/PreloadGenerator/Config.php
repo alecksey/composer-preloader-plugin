@@ -27,6 +27,8 @@ class Config
 
     private string $output_file = 'vendor/preload.php';
 
+    private string $list_output_file = 'vendor/preload.list.php';
+
     /*
      * Call enums cached by op_cache_compile_file() raises seg fault of php, so we need to use include instead
      * @var bool
@@ -212,6 +214,17 @@ class Config
     {
         $this->useIncludeForEnumFiles = $useIncludeForEnumFiles;
     }
+
+    public function getListOutputFile(): string
+    {
+        return $this->list_output_file;
+    }
+
+    public function setListOutputFile(string $list_output_file): void
+    {
+        $this->list_output_file = $list_output_file;
+    }
+
 
 
 }

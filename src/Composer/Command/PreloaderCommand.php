@@ -81,6 +81,10 @@ class PreloaderCommand extends BaseCommand
         if (isset($extra['preloader']['use-include-for-enum-files']) ) {
             $config->setUseIncludeForEnumFiles($extra['preloader']['use-include-for-enum-files']);
         }
+
+        if (isset($extra['preloader']['list-output-file']) ) {
+            $config->setListOutputFile($extra['preloader']['list-output-file']);
+        }
         $config->setVendorDir($vendorDir);
 
         $this->config = $config;

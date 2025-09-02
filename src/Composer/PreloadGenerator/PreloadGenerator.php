@@ -57,6 +57,10 @@ class PreloadGenerator {
         }
 
         fclose($outputFile);
+
+        file_put_contents($rootDir . DIRECTORY_SEPARATOR . $this->config->getListOutputFile(), var_export(
+            '<?php' . PHP_EOL  . $enumFiles + $sorted, true
+        ));
     }
 
     private function renderHeader()
