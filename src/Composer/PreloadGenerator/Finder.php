@@ -164,6 +164,10 @@ class Finder {
         $visitor = new class extends NodeVisitorAbstract {
             private array $foundUseStatements = [];
             private bool $foundEnum = false;
+            private array $foundExtends = [];
+            private array $foundImplements = [];
+
+            private string $namespace = '';
 
             public function enterNode(Node $node) {
                 if ($node instanceof Use_) {
@@ -181,6 +185,23 @@ class Finder {
                 if($node instanceof Enum_) {
                     $this->foundEnum = true;
                 }
+
+                if($node instanceof Node\Stmt\Class_) {
+                    /* @var Node\Stmt\Class_ $node */
+                    if(count($node->implements) > 0) {
+                        foreach ($node->implements as $implement) {
+                            $this->foundImplements[] = $implement->toString();
+                        }
+                    }
+
+                    if(null !== $node->extends) {
+                        $this->foundExtends[] = $node->extends->toString();
+                    }
+                }
+
+                if($node instanceof Node\Stmt\Namespace_) {
+                    $this->namespace = $node->name->toString();
+                }
             }
 
             public function getFoundUseStatements(): array
@@ -191,6 +212,22 @@ class Finder {
             public function isFoundEnum() : bool
             {
                 return $this->foundEnum;
+            }
+
+            public function foundExtends() : array
+            {
+                return $this->foundExtends;
+
+            }
+
+            public function foundImplements() : array
+            {
+                return $this->foundImplements;
+            }
+
+            public function getNamesspace()
+            {
+                return $this->namespace;
             }
         };
 
@@ -222,6 +259,45 @@ class Finder {
 
                 $deps[] = $filePath;
             }
+        }
+
+        foreach ($visitor->foundExtends() as $extend) {
+
+            if(strpos($extend, '\\') === false) {
+                $extend = $visitor->getNamesspace() . '\\' . $extend;
+            }
+            $filePath = $loader->findFile($extend);
+
+            if(false === $filePath) {
+                continue;
+            }
+
+            $filePath = str_replace($this->rootDir . DIRECTORY_SEPARATOR , '', realpath($filePath));
+
+            if(!isset($fileList[$filePath])) {
+                $depsAdded[$filePath] = $filePath;
+            }
+
+            $deps[] = $filePath;
+        }
+
+        foreach ($visitor->foundImplements() as $implement) {
+            if(strpos($implement, '\\') === false) {
+                $extend = $visitor->getNamesspace() . '\\' . $implement;
+            }
+            $filePath = $loader->findFile($implement);
+
+            if(false === $filePath) {
+                continue;
+            }
+
+            $filePath = str_replace($this->rootDir . DIRECTORY_SEPARATOR , '', realpath($filePath));
+
+            if(!isset($fileList[$filePath])) {
+                $depsAdded[$filePath] = $filePath;
+            }
+
+            $deps[] = $filePath;
         }
 
         $basePathName = str_replace($this->rootDir . DIRECTORY_SEPARATOR, '', $file->getPathname());
