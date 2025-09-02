@@ -148,10 +148,9 @@ class Finder {
         gc_enable();
         $depsAdded = [];
 
-        $parserFactory = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
 
         try {
-            $ast = $parserFactory->parse($file->getContents());
+            $ast = $this->parserFactory->parse($file->getContents());
         } catch (\Throwable $e) {
             echo $e->getMessage() . " in file: " . $file->getPathname();
             return;
