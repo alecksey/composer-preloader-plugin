@@ -14,6 +14,7 @@ use Symfony\Component\Finder\SplFileInfo;
 use PhpParser\ParserFactory;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Use_;
+use PhpParser\Node\Stmt\Enum_;
 use PhpParser\Node\Stmt\UseUse;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
@@ -163,6 +164,7 @@ class Finder {
         $traverser = new NodeTraverser();
         $visitor = new class extends NodeVisitorAbstract {
             private array $foundUseStatements = [];
+            private bool $foundEnum = false;
 
             public function enterNode(Node $node) {
                 if ($node instanceof Use_) {
@@ -176,11 +178,20 @@ class Finder {
                         }
                     }
                 }
+
+                if($node instanceof Enum_) {
+                    $this->foundEnum = true;
+                }
             }
 
             public function getFoundUseStatements(): array
             {
                 return $this->foundUseStatements;
+            }
+
+            public function isFoundEnum() : bool
+            {
+                return $this->foundEnum;
             }
         };
 
@@ -218,6 +229,7 @@ class Finder {
 
         $fileList[$basePathName] = [
             'path' => $basePathName,
+            'isEnum' => $visitor->isFoundEnum(),
             'deps' => $deps
         ];
 

@@ -24,18 +24,30 @@ class PreloadGenerator {
     {
         $finder = new Finder($this->config);
         $fileList = $finder->findFiles();
+        $enumFiles = [];
 
 
         $sorter = new StringSort();
         $sorter->setThrowCircularDependency(false);
+
+
         foreach ($fileList as $fileInfo) {
-            $sorter->add($fileInfo['path'], $fileInfo['deps']);;
+            if($this->config->isUseIncludeForEnumFiles() && $fileInfo['isEnum']) {
+                $enumFiles[] = $fileInfo['path'];
+            } else {
+                $sorter->add($fileInfo['path'], $fileInfo['deps']);;
+            }
+
         }
 
         $sorted = $sorter->sort();
         $rootDir = realpath(dirname(\Composer\Factory::getComposerFile()));
         $outputFile = fopen( $rootDir . DIRECTORY_SEPARATOR . $this->config->getOutputFile(), 'w');
         fwrite($outputFile, $this->renderHeader());
+
+        foreach ($enumFiles as $enumFile) {
+            fwrite($outputFile, $this->renderIncludeFile($enumFile));
+        }
 
         foreach ($sorted as $filePath) {
             fwrite($outputFile, $this->renderFile($filePath));
@@ -66,7 +78,16 @@ PHP;
         return $code;
 
     }
-    private function renderFile($filePath)
+
+    private function renderIncludeFile(string $filePath) : string
+    {
+        $code = <<<PHP
+include \$rootDir . \\DIRECTORY_SEPARATOR  .  '$filePath';
+
+PHP;
+
+    }
+    private function renderFile(string $filePath) : string
     {
         $code = <<<PHP
 \\opcache_compile_file(\$rootDir . \\DIRECTORY_SEPARATOR  .  '$filePath');

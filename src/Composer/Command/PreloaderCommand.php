@@ -78,6 +78,9 @@ class PreloaderCommand extends BaseCommand
             $config->setExcludeFilesRegex($extra['preloader']['exclude-regex']);
         }
 
+        if (isset($extra['preloader']['use-include-for-enum-files']) ) {
+            $config->setUseIncludeForEnumFiles($extra['preloader']['use-include-for-enum-files']);
+        }
         $config->setVendorDir($vendorDir);
 
         $this->config = $config;

@@ -27,6 +27,12 @@ class Config
 
     private string $output_file = 'vendor/preload.php';
 
+    /*
+     * Call enums cached by op_cache_compile_file() raises seg fault of php, so we need to use include instead
+     * @var bool
+     */
+    private bool $useIncludeForEnumFiles = true;
+
     public function __construct(array $paths = [], array $files = [], array $exclude_paths = [], array $exclude_files = [], array $extensions = [], $vendor_dir = '')
     {
         $this->setPaths($paths);
@@ -196,5 +202,16 @@ class Config
     {
         $this->exclude_files_regex = $exclude_files_regex;
     }
+
+    public function isUseIncludeForEnumFiles(): bool
+    {
+        return $this->useIncludeForEnumFiles;
+    }
+
+    public function setUseIncludeForEnumFiles(bool $useIncludeForEnumFiles): void
+    {
+        $this->useIncludeForEnumFiles = $useIncludeForEnumFiles;
+    }
+
 
 }
