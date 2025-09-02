@@ -34,9 +34,9 @@ class PreloadGenerator {
         foreach ($fileList as $fileInfo) {
             if($this->config->isUseIncludeForEnumFiles() && $fileInfo['isEnum']) {
                 $enumFiles[] = $fileInfo['path'];
-            } else {
-                $sorter->add($fileInfo['path'], $fileInfo['deps']);;
             }
+
+            $sorter->add($fileInfo['path'], $fileInfo['deps']);
 
         }
 
@@ -50,7 +50,10 @@ class PreloadGenerator {
         }
 
         foreach ($sorted as $filePath) {
-            fwrite($outputFile, $this->renderFile($filePath));
+            if(!in_array($filePath, $enumFiles)) {
+                fwrite($outputFile, $this->renderFile($filePath));
+            }
+
         }
 
         fclose($outputFile);
