@@ -45,22 +45,26 @@ class PreloadGenerator {
         $outputFile = fopen( $rootDir . DIRECTORY_SEPARATOR . $this->config->getOutputFile(), 'w');
         fwrite($outputFile, $this->renderHeader());
 
+        $writedFiles = [];
+
         foreach ($enumFiles as $enumFile) {
             fwrite($outputFile, $this->renderIncludeFile($enumFile));
+            $writedFiles[] = $rootDir . DIRECTORY_SEPARATOR . $enumFile;
         }
 
         foreach ($sorted as $filePath) {
             if(!in_array($filePath, $enumFiles)) {
                 fwrite($outputFile, $this->renderFile($filePath));
+                $writedFiles[] = $rootDir . DIRECTORY_SEPARATOR . $filePath;
             }
 
         }
 
         fclose($outputFile);
 
-        file_put_contents($rootDir . DIRECTORY_SEPARATOR . $this->config->getListOutputFile(), '<?php' . PHP_EOL  .  var_export(
-            $enumFiles + $sorted, true
-        ));
+        file_put_contents($rootDir . DIRECTORY_SEPARATOR . $this->config->getListOutputFile(), '<?php' . PHP_EOL  .
+            'return ' . var_export($writedFiles, true)) . ';'
+        ;
     }
 
     private function renderHeader()
