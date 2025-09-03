@@ -32,8 +32,8 @@ class CacheInfo {
 
         $missedList = [];
         foreach ($status['scripts'] as $script) {
-            if(!in_array($script, $fileList)) {
-                $missedList[] = $script;
+            if(!in_array($script['full_path'], $fileList)) {
+                $missedList[] = $script['full_path'];
             }
         }
 

@@ -63,8 +63,7 @@ class PreloadGenerator {
         fclose($outputFile);
 
         file_put_contents($rootDir . DIRECTORY_SEPARATOR . $this->config->getListOutputFile(), '<?php' . PHP_EOL  .
-            'return ' . var_export($writedFiles, true)) . ';'
-        ;
+            'return ' . var_export($writedFiles, true). ';' );
     }
 
     private function renderHeader()
