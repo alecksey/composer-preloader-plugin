@@ -21,11 +21,12 @@ class Plugin implements PluginInterface, Capable
     /**
      * @inheritDoc
      */
-    public function activate(Composer $composer, IOInterface $io): void {
-
+    public function activate(Composer $composer, IOInterface $io): void
+    {
     }
 
-    public function getCapabilities(): array {
+    public function getCapabilities(): array
+    {
         return [
             CommandProvider::class => PreloaderCommandProvider::class,
         ];
@@ -34,12 +35,14 @@ class Plugin implements PluginInterface, Capable
     /**
      * @inheritDoc
      */
-    public function deactivate(Composer $composer, IOInterface $io) {
+    public function deactivate(Composer $composer, IOInterface $io)
+    {
     }
 
     /**
      * @inheritDoc
      */
-    public function uninstall(Composer $composer, IOInterface $io) {
+    public function uninstall(Composer $composer, IOInterface $io)
+    {
     }
 }

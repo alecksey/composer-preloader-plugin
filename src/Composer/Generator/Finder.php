@@ -7,7 +7,7 @@
  * @version 1.0
  */
 
-namespace Oleksii\ComposerPreloader\Composer\PreloadGenerator;
+namespace Oleksii\ComposerPreloader\Composer\Generator;
 
 use Symfony\Component\Finder\Finder as SymfonyFinder;
 use Symfony\Component\Finder\SplFileInfo;
@@ -21,7 +21,8 @@ use PhpParser\NodeVisitorAbstract;
 
 use BadMethodCallException;
 
-class Finder {
+class Finder
+{
 
     private Config $config;
 
@@ -44,7 +45,7 @@ class Finder {
      */
     public function findFiles() : array
     {
-        if(count($this->config->getPaths()) == 0) {
+        if (count($this->config->getPaths()) == 0) {
             throw new BadMethodCallException('Include folders must be set');
         }
 
@@ -63,7 +64,7 @@ class Finder {
         $this->finder->ignoreDotFiles(true);
         $this->finder->ignoreVCS(true);
 
-        if(count($this->config->getFiles())) {
+        if (count($this->config->getFiles())) {
             $this->finder->append($this->config->getFiles());
         }
 
@@ -88,7 +89,7 @@ class Finder {
         $directoryRegexp = null;
         $filesRegexp = $this->config->getExcludeFilesRegex();
 
-        if(count($this->config->getExcludePaths()) > 0) {
+        if (count($this->config->getExcludePaths()) > 0) {
             $directoryRegexp = '/^(';
             $pathList = [];
             foreach ($this->config->getExcludePaths() as $excludePath) {
@@ -104,7 +105,7 @@ class Finder {
             $directoryRegexp .= ')/i';
         }
 
-        if(null === $filesRegexp && null === $directoryRegexp) {
+        if (null === $filesRegexp && null === $directoryRegexp) {
             return null;
         }
 
@@ -182,11 +183,11 @@ class Finder {
                     }
                 }
 
-                if($node instanceof Enum_) {
+                if ($node instanceof Enum_) {
                     $this->foundEnum = true;
                 }
 
-                if($node instanceof Node\Stmt\Class_) {
+                if ($node instanceof Node\Stmt\Class_) {
                     /* @var Node\Stmt\Class_ $node */
                     if(count($node->implements) > 0) {
                         foreach ($node->implements as $implement) {
@@ -199,7 +200,7 @@ class Finder {
                     }
                 }
 
-                if($node instanceof Node\Stmt\Namespace_) {
+                if ($node instanceof Node\Stmt\Namespace_) {
                     $this->namespace = $node->name->toString();
                 }
             }
@@ -243,17 +244,17 @@ class Finder {
 
                 $filePath = $loader->findFile($useStatement['name']);
 
-                if(false === $filePath) {
+                if (false === $filePath) {
                     continue;
                 }
 
-                if(is_dir($filePath)) {
+                if (is_dir($filePath)) {
                     throw new \RuntimeException('Directory is not supported');
                 }
 
                 $filePath = str_replace($this->rootDir . DIRECTORY_SEPARATOR , '', realpath($filePath));
 
-                if(!isset($fileList[$filePath])) {
+                if (!isset($fileList[$filePath])) {
                     $depsAdded[$filePath] = $filePath;
                 }
 
@@ -274,7 +275,7 @@ class Finder {
 
             $filePath = str_replace($this->rootDir . DIRECTORY_SEPARATOR , '', realpath($filePath));
 
-            if(!isset($fileList[$filePath])) {
+            if (!isset($fileList[$filePath])) {
                 $depsAdded[$filePath] = $filePath;
             }
 
@@ -293,7 +294,7 @@ class Finder {
 
             $filePath = str_replace($this->rootDir . DIRECTORY_SEPARATOR , '', realpath($filePath));
 
-            if(!isset($fileList[$filePath])) {
+            if (!isset($fileList[$filePath])) {
                 $depsAdded[$filePath] = $filePath;
             }
 

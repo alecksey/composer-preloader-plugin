@@ -7,7 +7,7 @@
  * @version 1.0
  */
 
-namespace Oleksii\ComposerPreloader\Composer\PreloadGenerator;
+namespace Oleksii\ComposerPreloader\Composer\Generator;
 
 class Config
 {
@@ -29,26 +29,34 @@ class Config
 
     private string $list_output_file = 'vendor/preload.list.php';
 
+    private string $root_dir;
+
     /*
      * Call enums cached by op_cache_compile_file() raises seg fault of php, so we need to use include instead
      * @var bool
      */
     private bool $useIncludeForEnumFiles = true;
 
-    public function __construct(array $paths = [], array $files = [], array $exclude_paths = [], array $exclude_files = [], array $extensions = [], $vendor_dir = '')
+    public function __construct(array $paths = [], array $files = [], array $exclude_paths = [],
+        array $exclude_files = [], array $extensions = [], $vendor_dir = '', $list_output_file = '', $output_file = '',
+        $exclude_files_regex = null, $useIncludeForEnumFiles = true)
     {
         $this->setPaths($paths);
         $this->setFiles($files);
         $this->setExcludePaths($exclude_paths);
         $this->setExcludeFiles($exclude_files);
         $this->setExtensions($extensions);
-
+        $this->setVendorDir($vendor_dir);
+        $this->setListOutputFile($list_output_file);
+        $this->setOutputFile($output_file);
+        $this->setExcludeFilesRegex($exclude_files_regex);
+        $this->setUseIncludeForEnumFiles($useIncludeForEnumFiles);
     }
 
     /**
      * @return array<int,string>
      */
-    public function getPaths() : array
+    public function getPaths(): array
     {
         return $this->paths;
     }
@@ -147,7 +155,7 @@ class Config
     /**
      * @return array
      */
-    public function getExcludeFiles() : array
+    public function getExcludeFiles(): array
     {
         return $this->exclude_files;
     }
@@ -225,6 +233,26 @@ class Config
         $this->list_output_file = $list_output_file;
     }
 
+    /**
+     * @return string
+     */
+    public function getRootDir(): string
+    {
+        return $this->root_dir;
+    }
+
+    /**
+     * @param string $root_dir
+     */
+    public function setRootDir(string $root_dir): void
+    {
+        if(empty($root_dir)) {
+            throw new \InvalidArgumentException(
+                'Root dir must be not empty'
+            );
+        }
+        $this->root_dir = $root_dir;
+    }
 
 
 }
