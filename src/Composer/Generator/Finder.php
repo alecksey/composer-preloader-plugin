@@ -238,7 +238,7 @@ class Finder
 
         $deps = [];
 
-        if(count($visitor->getFoundUseStatements()) > 0) {
+        if (count($visitor->getFoundUseStatements()) > 0) {
             foreach ($visitor->getFoundUseStatements() as $useStatement) {
 
 

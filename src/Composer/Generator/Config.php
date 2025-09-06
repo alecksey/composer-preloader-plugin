@@ -66,8 +66,8 @@ class Config
      */
     public function setPaths(array $paths)
     {
-        foreach($paths as $path) {
-            if(!is_string($path)) {
+        foreach ($paths as $path) {
+            if (!is_string($path)) {
                 throw new \InvalidArgumentException(
                     'Path must be a string'
                 );
@@ -90,8 +90,8 @@ class Config
      */
     public function setFiles($files)
     {
-        foreach($files as $file) {
-            if(!is_string($file)) {
+        foreach ($files as $file) {
+            if (!is_string($file)) {
                 throw new \InvalidArgumentException(
                     'File must be a string'
                 );
@@ -113,14 +113,14 @@ class Config
      */
     public function setExtensions($extensions)
     {
-        foreach($extensions as $extension) {
-            if(!is_string($extension)) {
+        foreach ($extensions as $extension) {
+            if (!is_string($extension)) {
                 throw new \InvalidArgumentException(
                     'Extension must be a string'
                 );
             }
 
-            if(strpos($extension, '.') !== false) {
+            if (strpos($extension, '.') !== false) {
                 throw new \InvalidArgumentException(
                     'Extension can not contain dot'
                 );
@@ -142,8 +142,8 @@ class Config
      */
     public function setExcludePaths($exclude_paths)
     {
-        foreach($exclude_paths as $exclude_path) {
-            if(!is_string($exclude_path)) {
+        foreach ($exclude_paths as $exclude_path) {
+            if (!is_string($exclude_path)) {
                 throw new \InvalidArgumentException(
                     'Exclude path must be a string'
                 );
@@ -165,8 +165,8 @@ class Config
      */
     public function setExcludeFiles(array $exclude_files) : Config
     {
-        foreach($exclude_files as $exclude_file) {
-            if(!is_string($exclude_file)) {
+        foreach ($exclude_files as $exclude_file) {
+            if (!is_string($exclude_file)) {
                 throw new \InvalidArgumentException(
                     'Exclude file must be a string'
                 );
@@ -194,7 +194,7 @@ class Config
 
     public function setOutputFile(string $output_file): void
     {
-        if(!is_string($output_file)) {
+        if (!is_string($output_file)) {
             throw new \InvalidArgumentException(
                 'Output file must be a string'
             );
@@ -246,7 +246,7 @@ class Config
      */
     public function setRootDir(string $root_dir): void
     {
-        if(empty($root_dir)) {
+        if (empty($root_dir)) {
             throw new \InvalidArgumentException(
                 'Root dir must be not empty'
             );
